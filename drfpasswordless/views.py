@@ -15,6 +15,7 @@ from drfpasswordless.serializers import (
     MobileVerificationSerializer,
 )
 from drfpasswordless.services import TokenService
+from footiva_api.users.serializers import  UserSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -146,9 +147,21 @@ class AbstractBaseObtainAuthToken(APIView):
             if token:
                 TokenSerializer = import_string(api_settings.PASSWORDLESS_AUTH_TOKEN_SERIALIZER)
                 token_serializer = TokenSerializer(data=token.__dict__, partial=True)
+                serializer_user = UserSerializer(user)
+
+
                 if token_serializer.is_valid():
                     # Return our key for consumption.
-                    return Response(token_serializer.data, status=status.HTTP_200_OK)
+                    # return Response(token_serializer.data, status=status.HTTP_200_OK)
+
+                    return Response({
+                        # "token": token_serializer.data,
+                        "token": token.key,
+                        "user_id": user.id,
+                        "user": serializer_user.data,
+
+                    }, status=status.HTTP_200_OK)
+
         else:
             logger.error("Couldn't log in unknown user. Errors on serializer: {}".format(serializer.error_messages))
         return Response({'detail': 'Couldn\'t log you in. Try again later.'}, status=status.HTTP_400_BAD_REQUEST)
