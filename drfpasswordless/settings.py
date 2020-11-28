@@ -9,7 +9,7 @@ DEFAULTS = {
     'PASSWORDLESS_AUTH_TYPES': ['EMAIL'],
 
     # URL Prefix for Authentication Endpoints
-    'PASSWORDLESS_AUTH_PREFIX': 'auth/',
+    'PASSWORDLESS_AUTH_PREFIX': 'api/auth/',
 
     #  URL Prefix for Verification Endpoints
     'PASSWORDLESS_VERIFY_PREFIX': 'auth/verify/',
